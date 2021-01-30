@@ -1,0 +1,22 @@
+<h1 id="tableLabel">Past matches</h1>
+
+<button class="btn btn-primary" (click)="onRefresh()" style="float:right;">Refresh</button>
+
+<p *ngIf="!matches"><em>Loading...</em></p>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="matches">
+  <thead>
+    <tr>
+      <th>Match</th>
+      <th>Winner</th>
+      <th>Winner Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let m of matches">
+      <td>{{ m.matchName }}</td>
+      <td>{{ m.winnerName }}</td>
+      <td>{{ m.winnerValue }}</td>
+    </tr>
+  </tbody>
+</table>

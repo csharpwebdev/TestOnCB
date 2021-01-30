@@ -1,0 +1,22 @@
+<h1>Play</h1>
+
+<button class="btn btn-primary" (click)="onRefresh()" style="float:right;">Refresh</button>
+
+<p *ngIf="!currentMatch"><em>Loading...</em></p>
+
+<div *ngIf="currentMatch != null && currentMatch.matchId > 0; else empty_content">
+  <p aria-live="polite">Current match: <strong>{{ currentMatch.matchName }}</strong></p>
+  <p aria-live="polite">Timestamp: <strong>{{  currentMatch.expiryDate }}</strong></p>
+  <p aria-live="polite">Your number: <strong>{{ currentMatch.yourNumber }}</strong></p>
+  <button class="btn btn-primary" style="margin-top:15px;"
+          (click)="play()" disabled="{{ currentMatch.alreadyPlayed}}">Play Now</button>
+</div>
+
+
+<ng-template #empty_content>
+  <div>
+    There is no current match.
+  </div>
+</ng-template>
+
+
