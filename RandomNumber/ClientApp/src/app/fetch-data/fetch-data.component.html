@@ -8,6 +8,7 @@
   <thead>
     <tr>
       <th>Match</th>
+      <th>Timestamp</th>
       <th>Winner</th>
       <th>Winner Value</th>
     </tr>
@@ -15,6 +16,7 @@
   <tbody>
     <tr *ngFor="let m of matches">
       <td>{{ m.matchName }}</td>
+      <td>{{ m.expiryDate | date:'long' }}</td>
       <td>{{ m.winnerName }}</td>
       <td>{{ m.winnerValue }}</td>
     </tr>

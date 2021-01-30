@@ -6,7 +6,7 @@
 
 <div *ngIf="currentMatch != null && currentMatch.matchId > 0; else empty_content">
   <p aria-live="polite">Current match: <strong>{{ currentMatch.matchName }}</strong></p>
-  <p aria-live="polite">Timestamp: <strong>{{  currentMatch.expiryDate }}</strong></p>
+  <p aria-live="polite">Timestamp: <strong>{{ currentMatch.expiryDate | date:'long' }}</strong></p>
   <p aria-live="polite">Your number: <strong>{{ currentMatch.yourNumber }}</strong></p>
   <button class="btn btn-primary" style="margin-top:15px;"
           (click)="play()" [disabled]="currentMatch.alreadyPlayed">Play Now</button>

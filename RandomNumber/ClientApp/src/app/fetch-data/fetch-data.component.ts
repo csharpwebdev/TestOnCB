@@ -25,6 +25,7 @@ export class FetchDataComponent {
 
 interface MatchResult {
   matchName: string;
+  expiryDate: Date;
   winnerName: string;
   winnerValue: string;
 }

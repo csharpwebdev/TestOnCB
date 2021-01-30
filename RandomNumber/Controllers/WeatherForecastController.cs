@@ -39,9 +39,9 @@ namespace RandomNumber.Controllers
                 .Select(m => {
                     var winner = _db.UserMatches.Where(um => um.MatchId == m.Id).OrderByDescending(um => um.ResultNumber).FirstOrDefault();
                     if(winner != null)
-                        return new MatchResult() { MatchName = m.Name, WinnerName = _db.Users.FirstOrDefault(u => u.UserName == winner.UserId).UserName, WinnerValue = winner.ResultNumber.ToString() };
+                        return new MatchResult() { MatchName = m.Name, ExpiryDate = m.ExpiryDate, WinnerName = _db.Users.FirstOrDefault(u => u.UserName == winner.UserId).UserName, WinnerValue = winner.ResultNumber.ToString() };
                     else
-                        return new MatchResult() { MatchName = m.Name, WinnerName = "N/A", WinnerValue = "N/A" };
+                        return new MatchResult() { MatchName = m.Name, ExpiryDate = m.ExpiryDate, WinnerName = "N/A", WinnerValue = "N/A" };
                 }).ToList();
 
             return results.ToArray();
@@ -129,6 +129,8 @@ namespace RandomNumber.Controllers
     public class MatchResult
     {
         public string MatchName { get; set; }
+
+        public DateTime ExpiryDate { get; set; }
 
         public string WinnerName { get; set; }
 
