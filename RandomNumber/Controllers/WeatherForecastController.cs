@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -7,6 +8,7 @@ using RandomNumber.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace RandomNumber.Controllers
@@ -48,7 +50,9 @@ namespace RandomNumber.Controllers
         [HttpGet("current")]
         public async Task<CurrentMatchResult> GetCurrentMatch()
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var user = _db.Users.FirstOrDefault(u => u.Id == userId);
 
             var curMatch = _db.Matches.FirstOrDefault(m => m.ExpiryDate >= DateTime.UtcNow);
             CurrentMatchResult result = new CurrentMatchResult();
@@ -86,7 +90,9 @@ namespace RandomNumber.Controllers
         [HttpPost("play")]
         public async Task<CurrentMatchResult> Play()
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var user = _db.Users.FirstOrDefault(u => u.Id == userId);
 
             var curMatch = _db.Matches.FirstOrDefault(m => m.ExpiryDate >= DateTime.UtcNow);
             CurrentMatchResult result = new CurrentMatchResult();

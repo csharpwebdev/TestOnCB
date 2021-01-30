@@ -16,6 +16,8 @@ export class CounterComponent {
   getCurrentMatch(): void {
     this.http.get<CurrentMatchResult>(this.baseUrl + 'match/current').subscribe(result => {
       this.currentMatch = result;
+      console.log(result);
+
     }, error => console.error(error));
   }
 

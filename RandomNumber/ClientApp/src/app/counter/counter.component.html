@@ -9,7 +9,7 @@
   <p aria-live="polite">Timestamp: <strong>{{  currentMatch.expiryDate }}</strong></p>
   <p aria-live="polite">Your number: <strong>{{ currentMatch.yourNumber }}</strong></p>
   <button class="btn btn-primary" style="margin-top:15px;"
-          (click)="play()" disabled="{{ currentMatch.alreadyPlayed}}">Play Now</button>
+          (click)="play()" [disabled]="currentMatch.alreadyPlayed">Play Now</button>
 </div>
 
 
