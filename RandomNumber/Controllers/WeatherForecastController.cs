@@ -54,7 +54,7 @@ namespace RandomNumber.Controllers
 
             var user = _db.Users.FirstOrDefault(u => u.Id == userId);
 
-            var curMatch = _db.Matches.FirstOrDefault(m => m.ExpiryDate >= DateTime.UtcNow);
+            var curMatch = _db.Matches.Where(m => m.ExpiryDate >= DateTime.UtcNow).OrderBy(m => m.ExpiryDate).FirstOrDefault();
             CurrentMatchResult result = new CurrentMatchResult();
 
             if(curMatch == null)
@@ -94,7 +94,8 @@ namespace RandomNumber.Controllers
 
             var user = _db.Users.FirstOrDefault(u => u.Id == userId);
 
-            var curMatch = _db.Matches.FirstOrDefault(m => m.ExpiryDate >= DateTime.UtcNow);
+            var curMatch = _db.Matches.Where(m => m.ExpiryDate >= DateTime.UtcNow).OrderBy(m => m.ExpiryDate).FirstOrDefault();
+
             CurrentMatchResult result = new CurrentMatchResult();
 
             if (curMatch == null)

@@ -13,8 +13,9 @@ namespace RandomNumber.Data
             if (!context.Matches.Any(m => m.ExpiryDate >= DateTime.UtcNow))
             {
                 var rand = new Random(DateTime.Now.Millisecond);
-                var matches = Enumerable.Range(1, 10)
-                    .Select(id => { var now = DateTime.UtcNow.AddSeconds(60 + rand.Next(180)); return new Match() { Name = $"{now.ToShortDateString()} - {id}", ExpiryDate = now };})
+                var date = DateTime.UtcNow;
+                var matches = Enumerable.Range(1, 100)
+                    .Select(id => { date = date.AddSeconds(60 + rand.Next(60)); return new Match() { Name = $"{date.ToShortDateString()} - {id}", ExpiryDate = date };})
                     .ToList();
                 
                 context.AddRange(matches);
