@@ -18,11 +18,13 @@ namespace RandomNumber.Controllers
     {
         private readonly ILogger<MatchController> _logger;
         private readonly ApplicationDbContext _db;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public MatchController(ILogger<MatchController> logger, ApplicationDbContext dbContext)
+        public MatchController(ILogger<MatchController> logger, ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
             _db = dbContext;
+            _userManager = userManager;
         }
 
         [HttpGet("getpast")]
@@ -44,8 +46,10 @@ namespace RandomNumber.Controllers
         }
 
         [HttpGet("current")]
-        public CurrentMatchResult GetCurrentMatch()
+        public async Task<CurrentMatchResult> GetCurrentMatch()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
             var curMatch = _db.Matches.FirstOrDefault(m => m.ExpiryDate >= DateTime.UtcNow);
             CurrentMatchResult result = new CurrentMatchResult();
 
@@ -62,7 +66,7 @@ namespace RandomNumber.Controllers
                 result.MatchName = curMatch.Name;
                 result.ExpiryDate = curMatch.ExpiryDate;
 
-                var userMatch = _db.UserMatches.FirstOrDefault(um => um.UserId == User.Identity.Name && um.MatchId == curMatch.Id);
+                var userMatch = _db.UserMatches.FirstOrDefault(um => um.UserId == user.UserName && um.MatchId == curMatch.Id);
                 if(userMatch == null)
                 {
                     // not played yet
@@ -80,8 +84,10 @@ namespace RandomNumber.Controllers
         }
 
         [HttpPost("play")]
-        public CurrentMatchResult Play()
+        public async Task<CurrentMatchResult> Play()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
             var curMatch = _db.Matches.FirstOrDefault(m => m.ExpiryDate >= DateTime.UtcNow);
             CurrentMatchResult result = new CurrentMatchResult();
 
@@ -94,12 +100,12 @@ namespace RandomNumber.Controllers
                 result.MatchId = curMatch.Id;
                 result.ExpiryDate = curMatch.ExpiryDate;
 
-                var userMatch = _db.UserMatches.FirstOrDefault(um => um.UserId == User.Identity.Name && um.MatchId == curMatch.Id);
+                var userMatch = _db.UserMatches.FirstOrDefault(um => um.UserId == user.UserName && um.MatchId == curMatch.Id);
                 if (userMatch == null)
                 {
                     // not played yet
                     Random rand = new Random(DateTime.Now.Millisecond);
-                    userMatch = new UserMatch() { UserId = User.Identity.Name, MatchId = curMatch.Id, ResultNumber = rand.Next(100) };
+                    userMatch = new UserMatch() { UserId = user.UserName, MatchId = curMatch.Id, ResultNumber = rand.Next(100) };
                     _db.UserMatches.Add(userMatch);
                     _db.SaveChanges();
                 }
